@@ -14,23 +14,27 @@
 
 
 #### Hey
+Using ```hey``` to test HPA on /health
 1. [Download `hey_linux_amd64`](https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64)
 2. Move file from downloads to current directory and give exec premision:
     - ```mv ~/Downloads/hey_linux_64 ./hey```
     - ```chmod +x ./hey```
 
-
 ## Run Locally on kubernetes
-Simply run ```make buildall```
+Simply run ```make deploy```
+
 
 ## Run locally with python
 1. Install dependencies
    - ```pip install -r requirements.txt```
 2. Run server
    - ```make serve``` 
+3. Go to llm/ directory ```cd ./llm``` and run ```make serve```
+4. Make sure to change the enpoint in ./routes/client.py to localhost:8081
 
 ## Testing
 ###### Unit tests ```make test```
 ###### Integration tests ```make integtest```
 ###### Stress testing ```make stresstest```
 Make stresstest will run hey command that will load create **n** requests to the http://\<**url**\>:**30080**/prompt/ endpoint, with the intention of increasing the CPU usage on the pod, thus triggering the autoscaling (HorizontalPodAutoscaler) to deploy an additional deployment to handle the heavy load
+
