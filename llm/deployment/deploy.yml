@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-model-service
+  labels:
+    app: model-service-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: model-service-api
+  template:
+    metadata:
+      labels:
+        app: model-service-api
+    spec:
+      containers:
+        - name: model-api
+          image: model-api:v1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 81
+          resources:
+            requests:
+              cpu: "16"
+              memory: "16Gi"
+            limits:
+              cpu: "24"
+              memory: "24Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 81
+            initialDelaySeconds: 60
+            periodSeconds: 10
