@@ -1,7 +1,10 @@
+serve:
+	uvicorn main:app --host 0.0.0.0 --port 8081 --reload
 
 test:
 	pytest -s ./tests/
 
+# Build all components by running startctl, dockerbuild, and runctl in sequence.
 buildall: startctl dockerbuild runctl
 
 startctl:

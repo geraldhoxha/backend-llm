@@ -8,8 +8,10 @@ from io import BytesIO
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 
+# Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 client = TestClient(app)
 
 def test_health():
@@ -18,6 +20,8 @@ def test_health():
     assert response.status_code == 200
     assert response.json() == {"status": "Healthy"}
 
+
+# Test image generation prompt
 def test_image_generation():
     prompt = "Tree in the forest"
     response = client.post("/model/generate",
@@ -28,11 +32,13 @@ def test_image_generation():
     assert response.status_code == 200
     assert response.headers["content-type"] == "image/png"
     
+    # Verify generated image
     image = Image.open(BytesIO(response.content))
     assert image.format == "PNG"
     assert image.mode == "RGB"
     
 
+# Test multiple concurrent image generation requests
 @pytest.mark.anyio
 async def test_concurrent_requests(caplog):
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as async_client:
